@@ -11,6 +11,10 @@
 
     <artifactId>auth-server</artifactId>
 
+    <properties>
+        <start-class>com.jeenguyen.demo.oauth.server.Application</start-class>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
