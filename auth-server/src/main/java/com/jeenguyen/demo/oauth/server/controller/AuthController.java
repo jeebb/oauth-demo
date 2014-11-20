@@ -14,6 +14,12 @@ public class AuthController {
 
     public static final String LOGIN_PAGE = "login";
 
+    @RequestMapping
+    @ResponseBody
+    public String index() {
+        return "Authorization Server !!!";
+    }
+
     @RequestMapping(value = "login",
                     method = RequestMethod.GET)
     public String login() {

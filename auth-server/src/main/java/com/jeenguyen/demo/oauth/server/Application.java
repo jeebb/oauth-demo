@@ -1,10 +1,7 @@
 package com.jeenguyen.demo.oauth.server;
 
 import com.google.common.collect.Sets;
-import com.jeenguyen.demo.oauth.api.entities.MongoAccessToken;
-import com.jeenguyen.demo.oauth.api.entities.MongoApproval;
-import com.jeenguyen.demo.oauth.api.entities.MongoClientDetails;
-import com.jeenguyen.demo.oauth.api.entities.MongoUser;
+import com.jeenguyen.demo.oauth.api.entities.*;
 import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -36,6 +33,7 @@ public class Application {
             mongoTemplate.dropCollection(MongoClientDetails.class);
             mongoTemplate.dropCollection(MongoAccessToken.class);
             mongoTemplate.dropCollection(MongoApproval.class);
+            mongoTemplate.dropCollection(MongoAuthorizationCode.class);
 
             // init the users
             MongoUser mongoUser = new MongoUser();
