@@ -1,6 +1,6 @@
 package com.jeenguyen.demo.oauth.api.entities;
 
-import com.ekinoffy.projectman.oauth.api.converters.SerializableObjectConverter;
+import com.jeenguyen.demo.oauth.api.converters.SerializableObjectConverter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;

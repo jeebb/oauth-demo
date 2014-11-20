@@ -27,7 +27,7 @@ public class Application {
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(Application.class, args);
 
-        if ("init".equalsIgnoreCase(args[0])) {
+        if (args .length > 0 && "init".equalsIgnoreCase(args[0])) {
             LOGGER.info("Start initializing the sample oauth data");
 
             MongoTemplate mongoTemplate = (MongoTemplate) context.getBean(MongoTemplate.class);
