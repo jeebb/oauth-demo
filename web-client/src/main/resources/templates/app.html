@@ -5,6 +5,29 @@
     <title>Demo App</title>
 </head>
 <body>
-    <h1>This is the demo application</h1>
+<!-- START BODY -->
+<h1>This is the demo application</h1>
+<div ng-app="demoApp" ng-controller="demoController">
+    Random Number: <span ng-bind="rdNumber"></span>
+</div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.27/angular.min.js"></script>
+<script src="http://code.angularjs.org/1.0.0rc10/angular-cookies-1.0.0rc10.js"></script>
+<script>
+    angular.module('demoApp', ['ngCookies']);
+    function demoController($scope, $cookies, $http) {
+        var accessToken = $cookies['access_token'];
+        var req = {
+            method: 'GET',
+            url: 'http://localhost:8082/services/random',
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            }
+        };
+        $http(req).success(function(resp) {
+            $scope.rdNumber = resp;
+        });
+    }
+</script>
+<!-- END BODY -->
 </body>
 </html>
