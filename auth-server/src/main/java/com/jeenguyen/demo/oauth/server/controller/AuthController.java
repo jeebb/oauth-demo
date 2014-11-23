@@ -26,11 +26,4 @@ public class AuthController {
         return LOGIN_PAGE;
     }
 
-    @RequestMapping(value = "testRedirect",
-                    method = RequestMethod.GET)
-    @ResponseBody
-    public String testRedirect() {
-        return "Green codes !!!";
-    }
-
 }
