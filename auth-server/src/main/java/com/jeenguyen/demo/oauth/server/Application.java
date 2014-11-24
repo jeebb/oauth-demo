@@ -48,7 +48,7 @@ public class Application {
             clientDetails.setClientSecret("web-client-secret");
             clientDetails.setSecretRequired(true);
             clientDetails.setResourceIds(Sets.newHashSet("project-man"));
-            clientDetails.setScope(Sets.newHashSet("read", "write"));
+            clientDetails.setScope(Sets.newHashSet("call-services"));
             clientDetails.setAuthorizedGrantTypes(Sets.newHashSet("authorization_code", "refresh_token"));
             clientDetails.setRegisteredRedirectUri(Sets.newHashSet("http://localhost:8080"));
             clientDetails.setAuthorities(AuthorityUtils.createAuthorityList("ROLE_USER"));

@@ -1,6 +1,7 @@
 package com.jeenguyen.demo.web.controller;
 
 import com.jeenguyen.demo.web.model.AccessTokenResponse;
+import com.jeenguyen.demo.web.model.RefreshTokenResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.Cookie;
@@ -29,6 +31,9 @@ public class WebController {
 
     @Value("${oauth.token.url}")
     private String accessTokenUrl;
+
+    @Value("${oauth.token.refresh.url}")
+    private String refreshTokenUrl;
 
     @Value("${oauth.id.secret}")
     private String encodedIdSecret;
@@ -53,8 +58,10 @@ public class WebController {
             if (accessTokenResponse.getStatusCode() == HttpStatus.ACCEPTED ||
                     accessTokenResponse.getStatusCode() == HttpStatus.OK) {
                 Cookie cookie = new Cookie("access_token", accessTokenResponse.getBody().getAccessToken());
-                cookie.setMaxAge(accessTokenExpireTime);
+                cookie.setMaxAge(accessTokenExpireTime + 60);
                 response.addCookie(cookie);
+
+                request.getSession(true).setAttribute("refreshToken", accessTokenResponse.getBody().getRefreshToken());
             } else {
                 model.addAttribute("authUrl", authUrl);
                 page = LOGIN;
@@ -66,4 +73,27 @@ public class WebController {
         return page;
     }
 
+    @RequestMapping(value = "refreshToken")
+    @ResponseBody
+    public ResponseEntity<RefreshTokenResult> refreshToken(HttpServletRequest request) {
+        RefreshTokenResult result = new RefreshTokenResult();
+        String refreshToken = String.valueOf(request.getSession().getAttribute("refreshToken"));
+        if (refreshToken != null) {
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add("Authorization", "Basic ".concat(encodedIdSecret));
+            ResponseEntity<AccessTokenResponse> accessTokenResponse = restTemplate.
+                    exchange(String.format(refreshTokenUrl, refreshToken), HttpMethod.GET,
+                            new HttpEntity<Object>(httpHeaders), AccessTokenResponse.class);
+            if (accessTokenResponse.getStatusCode() == HttpStatus.ACCEPTED ||
+                    accessTokenResponse.getStatusCode() == HttpStatus.OK) {
+                result.setAccessToken(accessTokenResponse.getBody().getAccessToken());
+                result.setIsSuccess(true);
+            } else {
+                result.setIsSuccess(false);
+            }
+        } else {
+            result.setIsSuccess(false);
+        }
+        return new ResponseEntity<RefreshTokenResult>(result, HttpStatus.OK);
+    }
 }

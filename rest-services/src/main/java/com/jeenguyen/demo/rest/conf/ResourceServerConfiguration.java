@@ -34,8 +34,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     public void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-            .antMatchers(HttpMethod.GET, "/**").access("#oauth2.hasScope('read')")
-            .and()
+            .antMatchers(HttpMethod.GET, "/**").access("#oauth2.hasScope('call-services')")
+                .and()
             .headers().addHeaderWriter(new HeaderWriter() {
                 @Override
                 public void writeHeaders(HttpServletRequest request, HttpServletResponse response) {

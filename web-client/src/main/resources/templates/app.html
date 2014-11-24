@@ -19,7 +19,7 @@
         var app = angular.module('demoApp', ['ngCookies']);
         app.controller('DemoController', function($scope, $cookies, $http) {
 
-            var loadRandom = function() {
+            var loadRandom = function(withNewAccessToken) {
                 var accessToken = $cookies['access_token'];
                 var req = {
                     method: 'GET',
@@ -30,13 +30,26 @@
                 };
                 $http(req).success(function(resp) {
                     $scope.rdNumber = resp;
+                }).error(function(resp, status) {
+                    if (withNewAccessToken == false && status == 401) {
+                        $http.get('/refreshToken').success(function(data) {
+                            if (data['isSuccess'] == true) {
+                                $cookies['access_token'] = data['accessToken'];
+                                loadRandom(true);
+                            } else {
+                                alert("No medicine !!! ><");
+                            }
+                        });
+                    } else {
+                        alert("No medicine !!! -_-");
+                    }
                 });
             };
 
-            loadRandom();
+            loadRandom(false);
 
             $scope.doClick = function() {
-                loadRandom();
+                loadRandom(false);
             };
 
         });
