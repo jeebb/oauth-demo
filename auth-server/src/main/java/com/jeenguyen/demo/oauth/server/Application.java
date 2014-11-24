@@ -52,7 +52,7 @@ public class Application {
             clientDetails.setAuthorizedGrantTypes(Sets.newHashSet("authorization_code", "refresh_token"));
             clientDetails.setRegisteredRedirectUri(Sets.newHashSet("http://localhost:8080"));
             clientDetails.setAuthorities(AuthorityUtils.createAuthorityList("ROLE_USER"));
-            clientDetails.setAccessTokenValiditySeconds(7200);
+            clientDetails.setAccessTokenValiditySeconds(60);
             clientDetails.setRefreshTokenValiditySeconds(14400);
             clientDetails.setAutoApprove(false);
             mongoTemplate.save(clientDetails);
